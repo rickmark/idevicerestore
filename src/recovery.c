@@ -366,6 +366,10 @@ int recovery_send_applelogo(struct idevicerestore_client_t* client, plist_t buil
 		}
 	}
 
+	if (!build_identity_has_component(build_identity, component)) {
+		return 0;
+	}
+
 	info("Sending %s...\n", component);
 	if (client->recovery == NULL) {
 		if (recovery_client_new(client) < 0) {
