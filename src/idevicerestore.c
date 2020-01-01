@@ -73,6 +73,7 @@ static struct option longopts[] = {
 	{ "no-action", no_argument,     NULL, 'n' },
 	{ "cache-path", required_argument, NULL, 'C' },
 	{ "no-input", no_argument,      NULL, 'y' },
+	{ "syslog", required_argument,	NULL, 'S' },
 	{ NULL, 0, NULL, 0 }
 };
 
@@ -117,6 +118,7 @@ static void usage(int argc, char* argv[], int err)
 	" -t, --shsh       Fetch TSS record and save to .shsh file, then exit\n" \
 	" -k, --keep-pers  Write personalized components to files for debugging\n" \
 	" -p, --pwn        Put device in pwned DFU mode and exit (limera1n devices only)\n" \
+	" -S, --syslog PATH		Output syslog from device to PATH\n" \
 	"\n" \
 	"Homepage: <" PACKAGE_URL ">\n",
 	(name ? name + 1 : argv[0]));
@@ -327,7 +329,7 @@ int idevicerestore_start(struct idevicerestore_client_t* client)
 			error("ERROR: Could not open device in WTF mode\n");
 			return -1;
 		}
-		if ((dfu_get_cpid(client, &cpid) < 0) || (cpid == 0)) { 
+		if ((dfu_get_cpid(client, &cpid) < 0) || (cpid == 0)) {
 			error("ERROR: Could not get CPID for WTF mode device\n");
 			dfu_client_free(client);
 			return -1;
@@ -971,7 +973,7 @@ int idevicerestore_start(struct idevicerestore_client_t* client)
 			remove(tmpf);
 			rename(filesystem, tmpf);
 			free(filesystem);
-			filesystem = strdup(tmpf); 
+			filesystem = strdup(tmpf);
 		}
 	}
 
@@ -1474,6 +1476,19 @@ void idevicerestore_set_cache_path(struct idevicerestore_client_t* client, const
 	}
 }
 
+void idevicerestore_set_syslog_path(struct idevicerestore_client_t* client, const char* path)
+{
+	if (!client)
+		return;
+	if (client->syslog_path) {
+		free(client->syslog_path);
+		client->syslog_path = NULL;
+	}
+	if (path) {
+		client->syslog_path = strdup(path);
+	}
+}
+
 void idevicerestore_set_progress_callback(struct idevicerestore_client_t* client, idevicerestore_progress_cb_t cbfunc, void* userdata)
 {
 	if (!client)
@@ -1528,7 +1543,7 @@ int main(int argc, char* argv[]) {
 		client->flags |= FLAG_INTERACTIVE;
 	}
 
-	while ((opt = getopt_long(argc, argv, "dhcesxtpli:u:nC:ky", longopts, &optindex)) > 0) {
+	while ((opt = getopt_long(argc, argv, "dhcesxtpli:u:nC:kyS:", longopts, &optindex)) > 0) {
 		switch (opt) {
 		case 'h':
 			usage(argc, argv, 0);
@@ -1604,6 +1619,10 @@ int main(int argc, char* argv[]) {
 		case 'y':
 			client->flags &= ~FLAG_INTERACTIVE;
 			break;
+
+		case 'S':
+			client->flags |= ~FLAG_SYSLOG;
+			client->syslog_path = strdup(optarg);
 
 		default:
 			usage(argc, argv, 1);
@@ -2131,7 +2150,7 @@ int get_tss_response(struct idevicerestore_client_t* client, plist_t build_ident
 			if (node) {
 				plist_dict_set_item(parameters, "BbSNUM", plist_copy(node));
 			}
-		
+
 			/* add baseband parameters */
 			tss_request_add_baseband_tags(request, parameters, NULL);
 

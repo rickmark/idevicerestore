@@ -43,6 +43,7 @@ extern "C" {
 #define FLAG_SHSHONLY        (1 << 7)
 #define FLAG_LATEST          (1 << 8)
 #define FLAG_INTERACTIVE     (1 << 9)
+#define FLAG_SYSLOG          (1 << 10)
 
 struct idevicerestore_client_t;
 
@@ -67,6 +68,7 @@ void idevicerestore_set_udid(struct idevicerestore_client_t* client, const char*
 void idevicerestore_set_flags(struct idevicerestore_client_t* client, int flags);
 void idevicerestore_set_ipsw(struct idevicerestore_client_t* client, const char* path);
 void idevicerestore_set_cache_path(struct idevicerestore_client_t* client, const char* path);
+void idevicerestore_set_syslog_path(struct idevicerestore_client_t* client, const char* path);
 void idevicerestore_set_progress_callback(struct idevicerestore_client_t* client, idevicerestore_progress_cb_t cbfunc, void* userdata);
 void idevicerestore_set_info_stream(FILE* strm);
 void idevicerestore_set_error_stream(FILE* strm);
