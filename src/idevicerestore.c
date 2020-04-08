@@ -76,6 +76,7 @@ static struct option longopts[] = {
 	{ "plain-progress", no_argument, NULL, 'P' },
 	{ "restore-mode", no_argument,  NULL, 'R' },
 	{ "ticket", required_argument,  NULL, 'T' },
+	{ "no-restore", no_argument,    NULL, 'z' },
 	{ NULL, 0, NULL, 0 }
 };
 
@@ -118,6 +119,7 @@ static void usage(int argc, char* argv[], int err)
 	" -s, --cydia      Use Cydia's signature service instead of Apple's\n" \
 	" -x, --exclude    Exclude nor/baseband upgrade\n" \
 	" -t, --shsh       Fetch TSS record and save to .shsh file, then exit\n" \
+	" -z, --no-restore Do not restore and end after booting to the ramdisk\n" \
 	" -k, --keep-pers  Write personalized components to files for debugging\n" \
 	" -p, --pwn        Put device in pwned DFU mode and exit (limera1n devices only)\n" \
 	" -P, --plain-progress  Print progress as plain step and progress\n" \
@@ -1189,6 +1191,11 @@ int idevicerestore_start(struct idevicerestore_client_t* client)
 			return -2;
 		}
 	} else if (client->mode->index == MODE_RECOVERY) {
+		if ((client->flags & FLAGS_NO_RESTORE_MODE) != 0) {
+			info("Device is now in restore mode. Exiting as requested.");
+			return 0;
+		}
+
 		// device is in recovery mode
 		if ((client->build_major > 8) && !(client->flags & FLAG_CUSTOM)) {
 			if (!client->image4supported) {
@@ -1636,6 +1643,10 @@ int main(int argc, char* argv[]) {
 
 		case 'R':
 			client->flags |= FLAG_ALLOW_RESTORE_MODE;
+			break;
+
+		case 'z':
+			client->flags |= FLAG_NO_RESTORE_MODE;
 			break;
 
 		case 'T': {
