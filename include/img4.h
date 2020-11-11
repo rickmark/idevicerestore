@@ -26,8 +26,16 @@
 extern "C" {
 #endif
 
+#define IMG4_MAGIC "IMG4"
+#define IMG4_PAYLOAD_MAGIC "IM4P"
+#define IMG4_MANIFEST_MAGIC "IM4M"
+
+#define IMG4_MAGIC_SIZE 4
+
+
 int img4_stitch_component(const char* component_name, const unsigned char* component_data, unsigned int component_size, const unsigned char* blob, unsigned int blob_size, unsigned char** img4_data, unsigned int *img4_size);
 int img4_create_local_manifest(plist_t request, plist_t* manifest);
+
 
 #ifdef __cplusplus
 }

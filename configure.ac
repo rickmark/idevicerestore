@@ -132,6 +132,7 @@ AC_OUTPUT([
 Makefile
 src/Makefile
 docs/Makefile
+tools/Makefile
 ])
 
 echo "
