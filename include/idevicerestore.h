@@ -44,6 +44,8 @@ extern "C" {
 #define FLAG_LATEST          (1 << 8)
 #define FLAG_INTERACTIVE     (1 << 9)
 
+
+
 struct idevicerestore_client_t;
 
 enum {

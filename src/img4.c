@@ -21,6 +21,9 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "common.h"
 #include "img4.h"
@@ -36,8 +39,7 @@
 #define ASN1_INTEGER 0x02
 #define ASN1_BOOLEAN 0x01
 
-#define IMG4_MAGIC "IMG4"
-#define IMG4_MAGIC_SIZE 4
+
 
 static int asn1_calc_int_size(uint64_t value)
 {
@@ -705,4 +707,53 @@ int img4_create_local_manifest(plist_t request, plist_t* manifest)
 	free(buf);
 
 	return 0;
+}
+
+
+img4_type img4_get_type(const char* path) {
+	char header[16];
+	size_t sequenceLength;
+	int file = open(path, O_RDONLY);
+	if (!file) { return kImg4Invalid; }
+
+	ssize_t bytesRead = read(file, header, 16);
+	close(file);
+
+	if (bytesRead < 16) {
+		return kImg4Invalid;
+	}
+
+	if (header[0] != 0x30) {return kImg4Invalid; }
+	if (header[1] & 0x80)
+	{
+		sequenceLength = 1 + (header[1] & 0x7F);
+	} else {
+		sequenceLength = 1;
+	}
+
+	if ((sequenceLength > 8) ||
+		  (header[1 + sequenceLength] != 0x16) ||
+			(header[2 + sequenceLength] != 0x04) ||
+			(header[3 + sequenceLength] != 'I') ||
+			(header[4 + sequenceLength] != 'M'))
+	{
+		return kImg4Invalid;
+	}
+
+	if ((header[5 + sequenceLength] == 'G') &&
+		(header[6 + sequenceLength] == '4')) {
+			return kImg4Complete;
+	}
+
+	if ((header[5 + sequenceLength] == '4') &&
+			(header[6 + sequenceLength] == 'M')) {
+			return kImg4Manifest;
+	}
+
+	if ((header[5 + sequenceLength] == '4') &&
+			(header[6 + sequenceLength] == 'P')) {
+			return kImg4Payload;
+	}
+
+	return kImg4Invalid;
 }

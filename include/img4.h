@@ -32,10 +32,16 @@ extern "C" {
 
 #define IMG4_MAGIC_SIZE 4
 
+typedef enum {
+  kImg4Invalid = 0,
+  kImg4Complete = 1,
+  kImg4Payload = 2,
+  kImg4Manifest = 3
+} img4_type;
 
 int img4_stitch_component(const char* component_name, const unsigned char* component_data, unsigned int component_size, const unsigned char* blob, unsigned int blob_size, unsigned char** img4_data, unsigned int *img4_size);
 int img4_create_local_manifest(plist_t request, plist_t* manifest);
-
+img4_type img4_get_type(const char* path);
 
 #ifdef __cplusplus
 }

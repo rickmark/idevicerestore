@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CPID</key>
+	<integer>32807</integer>
+	<key>CPRV</key>
+	<integer>1</integer>
+	<key>CPFM</key>
+	<integer>3</integer>
+	<key>SCEP</key>
+	<integer>1</integer>
+	<key>BDID</key>
+	<integer>66</integer>
+	<key>ECID</key>
+	<string>1F1F1F1FE0E0E0E0</string>
+	<key>IBFL</key>
+	<integer>60</integer>
+	<key>SRTG</key>
+	<string>iBoot-4172.0.0.100.14</string>
+	<key>APNonce</key>
+	<data>oOsJ/0rbMkepEXdIQgfC7mfePvaFqsReJzyrofnRP6c=</data>
+	<key>SEPNonce</key>
+	<data>C9XtW1EREN5I34G38bdkX4P9I1c=</data>
+</dict>
+</plist>

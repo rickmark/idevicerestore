@@ -31,13 +31,14 @@ AC_SUBST(OPENSSL_VERSION)
 
 # Checks for programs.
 AC_PROG_CC
+AC_PROG_CXX
 AM_PROG_CC_C_O
 AC_PROG_LIBTOOL
 
 # Checks for libraries.
-PKG_CHECK_MODULES(libirecovery, libirecovery >= $LIBIRECOVERY_VERSION)
+PKG_CHECK_MODULES(libirecovery, libirecovery-1.0 >= $LIBIRECOVERY_VERSION)
 PKG_CHECK_MODULES(libimobiledevice, libimobiledevice-1.0 >= $LIBIMOBILEDEVICE_VERSION)
-PKG_CHECK_MODULES(libplist, libplist >= $LIBPLIST_VERSION)
+PKG_CHECK_MODULES(libplist, libplist-2.0 >= $LIBPLIST_VERSION)
 PKG_CHECK_MODULES(libzip, libzip >= $LIBZIP_VERSION)
 PKG_CHECK_MODULES(libcurl, libcurl >= $LIBCURL_VERSION)
 PKG_CHECK_MODULES(openssl, openssl >= $OPENSSL_VERSION)
@@ -133,6 +134,7 @@ Makefile
 src/Makefile
 docs/Makefile
 tools/Makefile
+tests/Makefile
 ])
 
 echo "

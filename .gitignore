@@ -10,6 +10,7 @@
 autom4te.cache/*
 *.in
 */.deps/*
+*/.libs/*
 m4/*
 swig/*
 *.swp
@@ -33,5 +34,7 @@ libtool
 *Makefile
 py-compile
 stamp-h1
-src/.libs
-src/idevicerestore
+tests/data/external/
+tools/idevicerestore
+tools/ipersonalize
+.DS_Store
